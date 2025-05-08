@@ -33,25 +33,31 @@ if st.button("Generate Startup Idea"):
         """
 
         # Sending request to Gemini API
-        api_key = st.secrets["GEMINI_API_KEY"]
-        endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
+        try:
+            api_key = st.secrets["GEMINI_API_KEY"]
+            endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
+            
+            headers = {"Content-Type": "application/json"}
+            params = {"key": api_key}
+            body = {
+                "contents": [
+                    {"parts": [{"text": master_prompt}]}
+                ]
+            }
 
-        headers = {"Content-Type": "application/json"}
-        params = {"key": api_key}
-        body = {"contents": [
-            {"parts": [{"text": master_prompt}]}
-             ]
-        }
+            response = requests.post(endpoint, headers=headers, params=params, json=body)
 
-        response = requests.post(endpoint, headers=headers, params=params, json=body)
-
-        if response.status_code == 200:
-            result = response.json()
-            content = result["candidates"][0]["content"]["parts"][0]["text"]
-            st.markdown("### 🎉 Your Startup Plan")
-            st.markdown(content)
-        else:
-            st.error("API Error. Please check your key or input.")
+            if response.status_code == 200:
+                result = response.json()
+                content = result["candidates"][0]["content"]["parts"][0]["text"]
+                st.markdown("### 🎉 Your Startup Plan")
+                st.markdown(content)
+            else:
+                st.error(f"API Error: {response.status_code}, Message: {response.text}")
+        except KeyError as e:
+            st.error(f"Missing API Key: {e}")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
 
 # Footer
 st.markdown("---")
