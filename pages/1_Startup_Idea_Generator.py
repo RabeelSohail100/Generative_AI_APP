@@ -34,7 +34,6 @@ if st.button("Generate Startup Idea"):
 
         # Sending request to Gemini API
         try:
-            st.write("Available keys in secrets:", list(st.secrets.keys()))
             api_key = st.secrets["GEMINI_API_KEY"]
             endpoint = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent"
             
@@ -52,7 +51,7 @@ if st.button("Generate Startup Idea"):
             if response.status_code == 200:
                 result = response.json()
                 content = result["candidates"][0]["content"]["parts"][0]["text"]
-                st.markdown("### 🎉 Your Startup Plan")
+                st.markdown("### ✨ Here's the Result You Were Looking For!")
                 st.markdown(content)
             else:
                 st.error(f"API Error: {response.status_code}, Message: {response.text}")
