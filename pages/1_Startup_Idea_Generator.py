@@ -34,8 +34,10 @@ if st.button("Generate Startup Idea"):
 
         # Sending request to Gemini API
         try:
+            st.write("Available keys in secrets:", list(st.secrets.keys()))
             api_key = st.secrets["GEMINI_API_KEY"]
-            endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent"
+            endpoint = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent"
+            
             
             headers = {"Content-Type": "application/json"}
             params = {"key": api_key}
